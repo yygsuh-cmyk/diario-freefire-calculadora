@@ -2,13 +2,16 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Diário FF - Premiação por Dupla</title>
+<title>Diário FF - Cálculo Geral</title>
 <style>
 body { font-family: Arial; background:#111; color:#fff; }
-.box { max-width:400px; margin:40px auto; background:#1c1c1c; padding:20px; border-radius:10px; }
-input, button { width:100%; margin:6px 0; padding:8px; }
+.box { max-width:600px; margin:30px auto; background:#1c1c1c; padding:20px; border-radius:10px; }
+input, button { padding:8px; margin:4px 0; }
 button { background:#00ff88; border:none; font-weight:bold; cursor:pointer; }
-.result { margin-top:10px; }
+table { width:100%; margin-top:10px; border-collapse: collapse; }
+th, td { border:1px solid #333; padding:6px; text-align:center; }
+th { background:#222; }
+.total { margin-top:15px; font-size:16px; }
 </style>
 </head>
 <body>
@@ -17,43 +20,67 @@ button { background:#00ff88; border:none; font-weight:bold; cursor:pointer; }
 <h2>Configuração do Diário</h2>
 
 <input id="killValor" type="number" placeholder="Valor por kill (ex: 1)">
-<input id="primeiro" type="number" placeholder="1º lugar (R$)">
-<input id="segundo" type="number" placeholder="2º lugar (R$)">
-<input id="terceiro" type="number" placeholder="3º lugar (R$)">
+<input id="p1" type="number" placeholder="1º lugar (R$)">
+<input id="p2" type="number" placeholder="2º lugar (R$)">
+<input id="p3" type="number" placeholder="3º lugar (R$)">
 
 <hr>
 
-<h3>Resultado da DUO</h3>
-<input id="posicao" type="number" placeholder="Posição final">
-<input id="kills" type="number" placeholder="Kills da DUO">
+<h3>Resultados das DUOS</h3>
 
-<button onclick="calcular()">Calcular premiação</button>
+<table id="tabela">
+<tr>
+<th>Dupla</th>
+<th>Posição</th>
+<th>Kills</th>
+<th>Premiação</th>
+</tr>
+</table>
 
-<div class="result" id="resultado"></div>
+<button onclick="adicionarLinha()">➕ Adicionar dupla</button>
+<button onclick="calcularTudo()">💰 Calcular tudo</button>
+
+<div class="total" id="totalPago"></div>
 </div>
 
 <script>
-function calcular() {
-  const killValor = Number(document.getElementById("killValor").value);
-  const posicao = Number(document.getElementById("posicao").value);
-  const kills = Number(document.getElementById("kills").value);
-
-  let premioPosicao = 0;
-
-  if (posicao === 1) premioPosicao = Number(primeiro.value);
-  else if (posicao === 2) premioPosicao = Number(segundo.value);
-  else if (posicao === 3) premioPosicao = Number(terceiro.value);
-
-  // kills só valem até TOP 10
-  const killsValidas = posicao <= 10 ? kills : 0;
-
-  const total = premioPosicao + (killsValidas * killValor);
-
-  document.getElementById("resultado").innerHTML = `
-    🏆 Posição: ${posicao}º<br>
-    🎯 Kills válidas: ${killsValidas}<br>
-    💰 Total a receber: <b>R$ ${total.toFixed(2)}</b>
+function adicionarLinha() {
+  const tabela = document.getElementById("tabela");
+  const linha = tabela.insertRow();
+  linha.innerHTML = `
+    <td><input placeholder="Nome da dupla"></td>
+    <td><input type="number"></td>
+    <td><input type="number"></td>
+    <td>—</td>
   `;
+}
+
+function calcularTudo() {
+  const killValor = Number(document.getElementById("killValor").value);
+  const premios = {
+    1: Number(document.getElementById("p1").value),
+    2: Number(document.getElementById("p2").value),
+    3: Number(document.getElementById("p3").value)
+  };
+
+  const tabela = document.getElementById("tabela");
+  let totalPago = 0;
+
+  for (let i = 1; i < tabela.rows.length; i++) {
+    const row = tabela.rows[i];
+    const posicao = Number(row.cells[1].children[0].value);
+    const kills = Number(row.cells[2].children[0].value);
+
+    const premioPosicao = premios[posicao] || 0;
+    const killsValidas = posicao <= 10 ? kills : 0;
+    const total = premioPosicao + (killsValidas * killValor);
+
+    row.cells[3].innerText = `R$ ${total.toFixed(2)}`;
+    totalPago += total;
+  }
+
+  document.getElementById("totalPago").innerHTML =
+    `💸 <b>Total pago no campeonato:</b> R$ ${totalPago.toFixed(2)}`;
 }
 </script>
 
