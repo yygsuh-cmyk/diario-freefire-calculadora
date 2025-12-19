@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Diário Free Fire - Calculadora</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .box {
+      background: #1c1c1c;
+      padding: 20px;
+      border-radius: 10px;
+      width: 320px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    input {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #00ff88;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Diário Free Fire</h2>
+
+  <input type="number" id="taxa" placeholder="Taxa por DUO (ex: 3.50)">
+  <input type="number" id="duos" placeholder="Quantidade de DUOS">
+  <input type="number" id="primeiro" placeholder="1º lugar (R$)">
+  <input type="number" id="segundo" placeholder="2º lugar (R$)">
+  <input type="number" id="terceiro" placeholder="3º lugar (R$)">
+  <input type="number" id="kill" placeholder="Valor por kill (R$)">
+  <input type="number" id="killsEstimadas" placeholder="Kills até TOP 10 (ex: 10)">
+
+  <button onclick="calcular()">Calcular</button>
+
+  <div class="result" id="resultado"></div>
+</div>
+
+<script>
+function calcular() {
+  const taxa = Number(document.getElementById("taxa").value);
+  const duos = Number(document.getElementById("duos").value);
+  const primeiro = Number(document.getElementById("primeiro").value);
+  const segundo = Number(document.getElementById("segundo").value);
+  const terceiro = Number(document.getElementById("terceiro").value);
+  const kill = Number(document.getElementById("kill").value);
+  const killsEstimadas = Number(document.getElementById("killsEstimadas").value);
+
+  const arrecadado = taxa * duos;
+  const totalColocacao = primeiro + segundo + terceiro;
+  const totalKills = kill * killsEstimadas;
+  const premiacaoTotal = totalColocacao + totalKills;
+  const lucro = arrecadado - premiacaoTotal;
+
+  document.getElementById("resultado").innerHTML = `
+    💰 Arrecadação: R$ ${arrecadado.toFixed(2)}<br>
+    🏆 Premiação colocação: R$ ${totalColocacao.toFixed(2)}<br>
+    🎯 Kills (até TOP 10): R$ ${totalKills.toFixed(2)}<br>
+    📦 Premiação total: R$ ${premiacaoTotal.toFixed(2)}<br><br>
+    📈 <b>Lucro:</b> R$ ${lucro.toFixed(2)}
+  `;
+}
+</script>
+
+</body>
+</html>
