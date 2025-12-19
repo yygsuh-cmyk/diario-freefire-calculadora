@@ -1,90 +1,58 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Diário Free Fire - Calculadora</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .box {
-      background: #1c1c1c;
-      padding: 20px;
-      border-radius: 10px;
-      width: 320px;
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 15px;
-    }
-    input {
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 8px;
-      border-radius: 5px;
-      border: none;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background: #00ff88;
-      border: none;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .result {
-      margin-top: 15px;
-      font-size: 14px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Diário FF - Premiação por Dupla</title>
+<style>
+body { font-family: Arial; background:#111; color:#fff; }
+.box { max-width:400px; margin:40px auto; background:#1c1c1c; padding:20px; border-radius:10px; }
+input, button { width:100%; margin:6px 0; padding:8px; }
+button { background:#00ff88; border:none; font-weight:bold; cursor:pointer; }
+.result { margin-top:10px; }
+</style>
 </head>
 <body>
 
 <div class="box">
-  <h2>Diário Free Fire</h2>
+<h2>Configuração do Diário</h2>
 
-  <input type="number" id="taxa" placeholder="Taxa por DUO (ex: 3.50)">
-  <input type="number" id="duos" placeholder="Quantidade de DUOS">
-  <input type="number" id="primeiro" placeholder="1º lugar (R$)">
-  <input type="number" id="segundo" placeholder="2º lugar (R$)">
-  <input type="number" id="terceiro" placeholder="3º lugar (R$)">
-  <input type="number" id="kill" placeholder="Valor por kill (R$)">
-  <input type="number" id="killsEstimadas" placeholder="Kills até TOP 10 (ex: 10)">
+<input id="killValor" type="number" placeholder="Valor por kill (ex: 1)">
+<input id="primeiro" type="number" placeholder="1º lugar (R$)">
+<input id="segundo" type="number" placeholder="2º lugar (R$)">
+<input id="terceiro" type="number" placeholder="3º lugar (R$)">
 
-  <button onclick="calcular()">Calcular</button>
+<hr>
 
-  <div class="result" id="resultado"></div>
+<h3>Resultado da DUO</h3>
+<input id="posicao" type="number" placeholder="Posição final">
+<input id="kills" type="number" placeholder="Kills da DUO">
+
+<button onclick="calcular()">Calcular premiação</button>
+
+<div class="result" id="resultado"></div>
 </div>
 
 <script>
 function calcular() {
-  const taxa = Number(document.getElementById("taxa").value);
-  const duos = Number(document.getElementById("duos").value);
-  const primeiro = Number(document.getElementById("primeiro").value);
-  const segundo = Number(document.getElementById("segundo").value);
-  const terceiro = Number(document.getElementById("terceiro").value);
-  const kill = Number(document.getElementById("kill").value);
-  const killsEstimadas = Number(document.getElementById("killsEstimadas").value);
+  const killValor = Number(document.getElementById("killValor").value);
+  const posicao = Number(document.getElementById("posicao").value);
+  const kills = Number(document.getElementById("kills").value);
 
-  const arrecadado = taxa * duos;
-  const totalColocacao = primeiro + segundo + terceiro;
-  const totalKills = kill * killsEstimadas;
-  const premiacaoTotal = totalColocacao + totalKills;
-  const lucro = arrecadado - premiacaoTotal;
+  let premioPosicao = 0;
+
+  if (posicao === 1) premioPosicao = Number(primeiro.value);
+  else if (posicao === 2) premioPosicao = Number(segundo.value);
+  else if (posicao === 3) premioPosicao = Number(terceiro.value);
+
+  // kills só valem até TOP 10
+  const killsValidas = posicao <= 10 ? kills : 0;
+
+  const total = premioPosicao + (killsValidas * killValor);
 
   document.getElementById("resultado").innerHTML = `
-    💰 Arrecadação: R$ ${arrecadado.toFixed(2)}<br>
-    🏆 Premiação colocação: R$ ${totalColocacao.toFixed(2)}<br>
-    🎯 Kills (até TOP 10): R$ ${totalKills.toFixed(2)}<br>
-    📦 Premiação total: R$ ${premiacaoTotal.toFixed(2)}<br><br>
-    📈 <b>Lucro:</b> R$ ${lucro.toFixed(2)}
+    🏆 Posição: ${posicao}º<br>
+    🎯 Kills válidas: ${killsValidas}<br>
+    💰 Total a receber: <b>R$ ${total.toFixed(2)}</b>
   `;
 }
 </script>
