@@ -1,88 +1,112 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Diário FF - Cálculo Geral</title>
-<style>
-body { font-family: Arial; background:#111; color:#fff; }
-.box { max-width:600px; margin:30px auto; background:#1c1c1c; padding:20px; border-radius:10px; }
-input, button { padding:8px; margin:4px 0; }
-button { background:#00ff88; border:none; font-weight:bold; cursor:pointer; }
-table { width:100%; margin-top:10px; border-collapse: collapse; }
-th, td { border:1px solid #333; padding:6px; text-align:center; }
-th { background:#222; }
-.total { margin-top:15px; font-size:16px; }
-</style>
+  <meta charset="UTF-8">
+  <title>Diário STARS - Calculadora</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #5b1dbd, #2d0b59);
+      color: white;
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .logo img {
+      width: 140px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 20px;
+      border-radius: 14px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background: rgba(255,255,255,0.15);
+    }
+
+    input {
+      width: 90%;
+      padding: 6px;
+      border-radius: 6px;
+      border: none;
+      text-align: center;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #7c3aed;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #9f67ff;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 13px;
+      opacity: 0.8;
+      margin-top: 15px;
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="box">
-<h2>Configuração do Diário</h2>
+  <div class="logo">
+    <img src="logo.png" alt="Diário STARS">
+  </div>
 
-<input id="killValor" type="number" placeholder="Valor por kill (ex: 1)">
-<input id="p1" type="number" placeholder="1º lugar (R$)">
-<input id="p2" type="number" placeholder="2º lugar (R$)">
-<input id="p3" type="number" placeholder="3º lugar (R$)">
+  <div class="container">
+    <h1>⭐ DIÁRIO STARS — RESULTADOS ⭐</h1>
 
-<hr>
+    <table>
+      <thead>
+        <tr>
+          <th>Dupla</th>
+          <th>Colocação</th>
+          <th>Kills</th>
+          <th>Prêmio Colocação (R$)</th>
+          <th>Total a Receber (R$)</th>
+        </tr>
+      </thead>
+      <tbody id="tabela">
+        <!-- Linhas geradas pelo JS -->
+      </tbody>
+    </table>
 
-<h3>Resultados das DUOS</h3>
+    <button onclick="calcular()">Calcular Premiações</button>
 
-<table id="tabela">
-<tr>
-<th>Dupla</th>
-<th>Posição</th>
-<th>Kills</th>
-<th>Premiação</th>
-</tr>
-</table>
-
-<button onclick="adicionarLinha()">➕ Adicionar dupla</button>
-<button onclick="calcularTudo()">💰 Calcular tudo</button>
-
-<div class="total" id="totalPago"></div>
-</div>
-
-<script>
-function adicionarLinha() {
-  const tabela = document.getElementById("tabela");
-  const linha = tabela.insertRow();
-  linha.innerHTML = `
-    <td><input placeholder="Nome da dupla"></td>
-    <td><input type="number"></td>
-    <td><input type="number"></td>
-    <td>—</td>
-  `;
-}
-
-function calcularTudo() {
-  const killValor = Number(document.getElementById("killValor").value);
-  const premios = {
-    1: Number(document.getElementById("p1").value),
-    2: Number(document.getElementById("p2").value),
-    3: Number(document.getElementById("p3").value)
-  };
-
-  const tabela = document.getElementById("tabela");
-  let totalPago = 0;
-
-  for (let i = 1; i < tabela.rows.length; i++) {
-    const row = tabela.rows[i];
-    const posicao = Number(row.cells[1].children[0].value);
-    const kills = Number(row.cells[2].children[0].value);
-
-    const premioPosicao = premios[posicao] || 0;
-    const killsValidas = posicao <= 10 ? kills : 0;
-    const total = premioPosicao + (killsValidas * killValor);
-
-    row.cells[3].innerText = `R$ ${total.toFixed(2)}`;
-    totalPago += total;
-  }
-
-  document.getElementById("totalPago").innerHTML =
-    `💸 <b>Total pago no campeonato:</b> R$ ${totalPago.toFixed(2)}`;
-}
-</script>
-
-</body>
-</html>
+    <div class="footer">
