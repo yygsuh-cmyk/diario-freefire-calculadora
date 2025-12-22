@@ -7,9 +7,26 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #5b1dbd;
+      background: linear-gradient(135deg, #5b1dbd, #2d0b59);
       color: white;
       padding: 20px;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .logo img {
+      width: 140px;
+    }
+
+    .card {
+      max-width: 900px;
+      margin: auto;
+      background: rgba(0,0,0,0.35);
+      padding: 20px;
+      border-radius: 14px;
     }
 
     h1 {
@@ -23,7 +40,7 @@
     }
 
     th, td {
-      border: 1px solid white;
+      border: 1px solid rgba(255,255,255,0.3);
       padding: 6px;
       text-align: center;
     }
@@ -32,6 +49,8 @@
       width: 80%;
       padding: 4px;
       text-align: center;
+      border-radius: 4px;
+      border: none;
     }
 
     button {
@@ -39,26 +58,51 @@
       width: 100%;
       padding: 10px;
       font-size: 16px;
+      background: #7c3aed;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #9f67ff;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 13px;
+      opacity: 0.8;
+      margin-top: 10px;
     }
   </style>
 </head>
 
 <body>
 
-<h1>⭐ DIÁRIO STARS ⭐</h1>
+<div class="logo">
+  <img src="logo.png" alt="Diário STARS">
+</div>
 
-<table>
-  <tr>
-    <th>Dupla</th>
-    <th>Colocação</th>
-    <th>Kills</th>
-    <th>Total (R$)</th>
-  </tr>
+<div class="card">
+  <h1>⭐ DIÁRIO STARS ⭐</h1>
 
-  <tbody id="tabela"></tbody>
-</table>
+  <table>
+    <tr>
+      <th>Dupla</th>
+      <th>Colocação</th>
+      <th>Kills</th>
+      <th>Total (R$)</th>
+    </tr>
+    <tbody id="tabela"></tbody>
+  </table>
 
-<button onclick="calcular()">Calcular Premiações</button>
+  <button onclick="calcular()">Calcular Premiações</button>
+
+  <div class="footer">
+    💸 Kill: R$0,50 | 👥 Modo DUO | ⭐ Diário STARS
+  </div>
+</div>
 
 <script>
 const premios = {1:30, 2:20, 3:10};
