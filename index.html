@@ -12,15 +12,6 @@ body {
   padding: 20px;
 }
 
-.logo {
-  text-align: center;
-  margin-bottom: 15px;
-}
-
-.logo img {
-  width: 150px;
-}
-
 .card {
   max-width: 1000px;
   margin: auto;
@@ -37,7 +28,6 @@ h1 {
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
 }
 
 th, td {
@@ -66,10 +56,6 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  background: #9f67ff;
-}
-
 .actions {
   display: flex;
   gap: 10px;
@@ -86,10 +72,6 @@ button:hover {
 </head>
 
 <body>
-
-<div class="logo">
-  <img src="logo.png" alt="Diário STARS">
-</div>
 
 <div class="card">
 <h1>⭐ DIÁRIO STARS ⭐</h1>
@@ -118,39 +100,53 @@ button:hover {
 </div>
 
 <script>
-const premios = {1:30, 2:20, 3:10};
+const premios = {
+  1: 25,
+  2: 15,
+  3: 10
+};
+
 const valorKill = 0.5;
 let totalDuplas = 0;
 
 function adicionarDupla() {
   totalDuplas++;
+
   const tabela = document.getElementById("tabela");
-  tabela.innerHTML += `
-    <tr>
-      <td><input placeholder="Nome da dupla" id="nome${totalDuplas}"></td>
-      <td><input type="number" id="pos${totalDuplas}"></td>
-      <td><input type="number" id="kill${totalDuplas}"></td>
-      <td id="total${totalDuplas}">0</td>
-    </tr>
+  const tr = document.createElement("tr");
+
+  tr.innerHTML = `
+    <td><input placeholder="Nome da dupla" id="nome${totalDuplas}"></td>
+    <td><input type="number" id="pos${totalDuplas}"></td>
+    <td><input type="number" id="kill${totalDuplas}"></td>
+    <td id="total${totalDuplas}">0.00</td>
   `;
+
+  tabela.appendChild(tr);
 }
 
 function calcular() {
   for (let i = 1; i <= totalDuplas; i++) {
     const pos = Number(document.getElementById("pos"+i).value);
     const kills = Number(document.getElementById("kill"+i).value);
-    const total = (premios[pos] || 0) + (kills * valorKill);
+
+    const premioColocacao = premios[pos] || 0;
+    const premioKill = kills * valorKill;
+
+    const total = premioColocacao + premioKill;
     document.getElementById("total"+i).innerText = total.toFixed(2);
   }
 }
 
 function copiar() {
-  let texto = "⭐ RESULTADOS - DIÁRIO STARS ⭐\n\n";
+  let texto = "⭐ RESULTADOS – DIÁRIO STARS ⭐\n\n";
+
   for (let i = 1; i <= totalDuplas; i++) {
     const nome = document.getElementById("nome"+i).value || "Dupla " + i;
     const total = document.getElementById("total"+i).innerText;
     texto += `${nome}: R$ ${total}\n`;
   }
+
   navigator.clipboard.writeText(texto);
   alert("Resultados copiados!");
 }
