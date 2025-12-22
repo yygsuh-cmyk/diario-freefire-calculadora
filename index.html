@@ -14,23 +14,23 @@
 
     h1 {
       text-align: center;
+      margin-bottom: 20px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
     }
 
     th, td {
       border: 1px solid white;
-      padding: 8px;
+      padding: 6px;
       text-align: center;
     }
 
     input {
-      width: 90%;
-      padding: 5px;
+      width: 80%;
+      padding: 4px;
       text-align: center;
     }
 
@@ -45,7 +45,7 @@
 
 <body>
 
-<h1>DIÁRIO STARS</h1>
+<h1>⭐ DIÁRIO STARS ⭐</h1>
 
 <table>
   <tr>
@@ -55,30 +55,38 @@
     <th>Total (R$)</th>
   </tr>
 
-  <tr>
-    <td>Dupla 1</td>
-    <td><input id="pos1" type="number"></td>
-    <td><input id="kill1" type="number"></td>
-    <td id="total1">0</td>
-  </tr>
-
-  <tr>
-    <td>Dupla 2</td>
-    <td><input id="pos2" type="number"></td>
-    <td><input id="kill2" type="number"></td>
-    <td id="total2">0</td>
-  </tr>
+  <tbody id="tabela"></tbody>
 </table>
 
-<button onclick="calcular()">Calcular</button>
+<button onclick="calcular()">Calcular Premiações</button>
 
 <script>
-function calcular() {
-  const premios = {1:30, 2:20, 3:10};
-  const valorKill = 0.5;
+const premios = {1:30, 2:20, 3:10};
+const valorKill = 0.5;
+const totalDuplas = 12;
 
-  for (let i = 1; i <= 2; i++) {
+const tabela = document.getElementById("tabela");
+
+for (let i = 1; i <= totalDuplas; i++) {
+  tabela.innerHTML +=
+    "<tr>" +
+    "<td>Dupla " + i + "</td>" +
+    "<td><input id='pos" + i + "' type='number'></td>" +
+    "<td><input id='kill" + i + "' type='number'></td>" +
+    "<td id='total" + i + "'>0</td>" +
+    "</tr>";
+}
+
+function calcular() {
+  for (let i = 1; i <= totalDuplas; i++) {
     const pos = Number(document.getElementById("pos"+i).value);
     const kills = Number(document.getElementById("kill"+i).value);
 
-    const total = (premios[pos] || 0) + (kills * valorKill);*
+    const total = (premios[pos] || 0) + (kills * valorKill);
+    document.getElementById("total"+i).innerText = total.toFixed(2);
+  }
+}
+</script>
+
+</body>
+</html>
