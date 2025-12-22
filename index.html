@@ -20,14 +20,14 @@ body {
   border-radius: 14px;
 }
 
-h1 {
+h1, h2 {
   text-align: center;
-  margin-bottom: 20px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 10px;
 }
 
 th, td {
@@ -45,7 +45,7 @@ input {
 }
 
 button {
-  margin-top: 10px;
+  margin-top: 8px;
   padding: 10px;
   width: 100%;
   font-size: 16px;
@@ -62,11 +62,23 @@ button {
   margin-top: 10px;
 }
 
-.footer {
-  text-align: center;
-  font-size: 13px;
-  opacity: 0.8;
-  margin-top: 10px;
+#resultadoPrint {
+  display: none;
+  margin-top: 20px;
+  background: rgba(0,0,0,0.4);
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.print-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.print-item:last-child {
+  border-bottom: none;
 }
 </style>
 </head>
@@ -91,64 +103,68 @@ button {
 <div class="actions">
   <button onclick="adicionarDupla()">➕ Adicionar Dupla</button>
   <button onclick="calcular()">💰 Calcular</button>
-  <button onclick="copiar()">📋 Copiar Resultados</button>
+  <button onclick="gerarPrint()">🖨️ Gerar Print</button>
 </div>
 
-<div class="footer">
-💸 Kill: R$0,50 | 👥 DUO | ⭐ Diário STARS
+<div id="resultadoPrint">
+  <h2>🏆 RESULTADO FINAL</h2>
+  <div id="listaPrint"></div>
 </div>
+
 </div>
 
 <script>
-const premios = {
-  1: 25,
-  2: 15,
-  3: 10
-};
-
+const premios = { 1: 25, 2: 15, 3: 10 };
 const valorKill = 0.5;
 let totalDuplas = 0;
 
 function adicionarDupla() {
   totalDuplas++;
-
-  const tabela = document.getElementById("tabela");
   const tr = document.createElement("tr");
-
   tr.innerHTML = `
     <td><input placeholder="Nome da dupla" id="nome${totalDuplas}"></td>
     <td><input type="number" id="pos${totalDuplas}"></td>
     <td><input type="number" id="kill${totalDuplas}"></td>
     <td id="total${totalDuplas}">0.00</td>
   `;
-
-  tabela.appendChild(tr);
+  document.getElementById("tabela").appendChild(tr);
 }
 
 function calcular() {
   for (let i = 1; i <= totalDuplas; i++) {
     const pos = Number(document.getElementById("pos"+i).value);
     const kills = Number(document.getElementById("kill"+i).value);
-
-    const premioColocacao = premios[pos] || 0;
-    const premioKill = kills * valorKill;
-
-    const total = premioColocacao + premioKill;
+    const total = (premios[pos] || 0) + (kills * valorKill);
     document.getElementById("total"+i).innerText = total.toFixed(2);
   }
 }
 
-function copiar() {
-  let texto = "⭐ RESULTADOS – DIÁRIO STARS ⭐\n\n";
+function gerarPrint() {
+  const resultados = [];
 
   for (let i = 1; i <= totalDuplas; i++) {
     const nome = document.getElementById("nome"+i).value || "Dupla " + i;
-    const total = document.getElementById("total"+i).innerText;
-    texto += `${nome}: R$ ${total}\n`;
+    const total = Number(document.getElementById("total"+i).innerText);
+    resultados.push({ nome, total });
   }
 
-  navigator.clipboard.writeText(texto);
-  alert("Resultados copiados!");
+  resultados.sort((a, b) => b.total - a.total);
+
+  const lista = document.getElementById("listaPrint");
+  lista.innerHTML = "";
+
+  resultados.forEach((item, index) => {
+    const div = document.createElement("div");
+    div.className = "print-item";
+    div.innerHTML = `
+      <strong>${index + 1}º</strong>
+      <span>${item.nome}</span>
+      <strong>R$ ${item.total.toFixed(2)}</strong>
+    `;
+    lista.appendChild(div);
+  });
+
+  document.getElementById("resultadoPrint").style.display = "block";
 }
 </script>
 
