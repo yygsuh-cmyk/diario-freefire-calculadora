@@ -1,11 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Teste</title>
+  <title>Diário STARS</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #5b1dbd;
+      color: white;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid white;
+      padding: 8px;
+      text-align: center;
+    }
+
+    input {
+      width: 90%;
+      padding: 5px;
+      text-align: center;
+    }
+
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>FUNCIONOU</h1>
-  <input placeholder="teste">
-</body>
-</html>
+
+<h1>DIÁRIO STARS</h1>
+
+<table>
+  <tr>
+    <th>Dupla</th>
+    <th>Colocação</th>
+    <th>Kills</th>
+    <th>Total (R$)</th>
+  </tr>
+
+  <tr>
+    <td>Dupla 1</td>
+    <td><input id="pos1" type="number"></td>
+    <td><input id="kill1" type="number"></td>
+    <td id="total1">0</td>
+  </tr>
+
+  <tr>
+    <td>Dupla 2</td>
+    <td><input id="pos2" type="number"></td>
+    <td><input id="kill2" type="number"></td>
+    <td id="total2">0</td>
+  </tr>
+</table>
+
+<button onclick="calcular()">Calcular</button>
+
+<script>
+function calcular() {
+  const premios = {1:30, 2:20, 3:10};
+  const valorKill = 0.5;
+
+  for (let i = 1; i <= 2; i++) {
+    const pos = Number(document.getElementById("pos"+i).value);
+    const kills = Number(document.getElementById("kill"+i).value);
+
+    const total = (premios[pos] || 0) + (kills * valorKill);*
