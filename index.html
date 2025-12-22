@@ -1,81 +1,88 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Diário STARS</title>
+<meta charset="UTF-8">
+<title>Diário STARS</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #5b1dbd, #2d0b59);
-      color: white;
-      padding: 20px;
-    }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #5b1dbd, #2d0b59);
+  color: white;
+  padding: 20px;
+}
 
-    .logo {
-      text-align: center;
-      margin-bottom: 15px;
-    }
+.logo {
+  text-align: center;
+  margin-bottom: 15px;
+}
 
-    .logo img {
-      width: 140px;
-    }
+.logo img {
+  width: 150px;
+}
 
-    .card {
-      max-width: 900px;
-      margin: auto;
-      background: rgba(0,0,0,0.35);
-      padding: 20px;
-      border-radius: 14px;
-    }
+.card {
+  max-width: 1000px;
+  margin: auto;
+  background: rgba(0,0,0,0.35);
+  padding: 20px;
+  border-radius: 14px;
+}
 
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
 
-    th, td {
-      border: 1px solid rgba(255,255,255,0.3);
-      padding: 6px;
-      text-align: center;
-    }
+th, td {
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 6px;
+  text-align: center;
+}
 
-    input {
-      width: 80%;
-      padding: 4px;
-      text-align: center;
-      border-radius: 4px;
-      border: none;
-    }
+input {
+  width: 95%;
+  padding: 5px;
+  border-radius: 4px;
+  border: none;
+  text-align: center;
+}
 
-    button {
-      margin-top: 15px;
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      background: #7c3aed;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      cursor: pointer;
-    }
+button {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  font-size: 16px;
+  background: #7c3aed;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
 
-    button:hover {
-      background: #9f67ff;
-    }
+button:hover {
+  background: #9f67ff;
+}
 
-    .footer {
-      text-align: center;
-      font-size: 13px;
-      opacity: 0.8;
-      margin-top: 10px;
-    }
-  </style>
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.footer {
+  text-align: center;
+  font-size: 13px;
+  opacity: 0.8;
+  margin-top: 10px;
+}
+</style>
 </head>
 
 <body>
@@ -85,50 +92,67 @@
 </div>
 
 <div class="card">
-  <h1>⭐ DIÁRIO STARS ⭐</h1>
+<h1>⭐ DIÁRIO STARS ⭐</h1>
 
-  <table>
-    <tr>
-      <th>Dupla</th>
-      <th>Colocação</th>
-      <th>Kills</th>
-      <th>Total (R$)</th>
-    </tr>
-    <tbody id="tabela"></tbody>
-  </table>
+<table>
+<thead>
+<tr>
+  <th>Dupla</th>
+  <th>Colocação</th>
+  <th>Kills</th>
+  <th>Total (R$)</th>
+</tr>
+</thead>
+<tbody id="tabela"></tbody>
+</table>
 
-  <button onclick="calcular()">Calcular Premiações</button>
+<div class="actions">
+  <button onclick="adicionarDupla()">➕ Adicionar Dupla</button>
+  <button onclick="calcular()">💰 Calcular</button>
+  <button onclick="copiar()">📋 Copiar Resultados</button>
+</div>
 
-  <div class="footer">
-    💸 Kill: R$0,50 | 👥 Modo DUO | ⭐ Diário STARS
-  </div>
+<div class="footer">
+💸 Kill: R$0,50 | 👥 DUO | ⭐ Diário STARS
+</div>
 </div>
 
 <script>
 const premios = {1:30, 2:20, 3:10};
 const valorKill = 0.5;
-const totalDuplas = 12;
+let totalDuplas = 0;
 
-const tabela = document.getElementById("tabela");
-
-for (let i = 1; i <= totalDuplas; i++) {
-  tabela.innerHTML +=
-    "<tr>" +
-    "<td>Dupla " + i + "</td>" +
-    "<td><input id='pos" + i + "' type='number'></td>" +
-    "<td><input id='kill" + i + "' type='number'></td>" +
-    "<td id='total" + i + "'>0</td>" +
-    "</tr>";
+function adicionarDupla() {
+  totalDuplas++;
+  const tabela = document.getElementById("tabela");
+  tabela.innerHTML += `
+    <tr>
+      <td><input placeholder="Nome da dupla" id="nome${totalDuplas}"></td>
+      <td><input type="number" id="pos${totalDuplas}"></td>
+      <td><input type="number" id="kill${totalDuplas}"></td>
+      <td id="total${totalDuplas}">0</td>
+    </tr>
+  `;
 }
 
 function calcular() {
   for (let i = 1; i <= totalDuplas; i++) {
     const pos = Number(document.getElementById("pos"+i).value);
     const kills = Number(document.getElementById("kill"+i).value);
-
     const total = (premios[pos] || 0) + (kills * valorKill);
     document.getElementById("total"+i).innerText = total.toFixed(2);
   }
+}
+
+function copiar() {
+  let texto = "⭐ RESULTADOS - DIÁRIO STARS ⭐\n\n";
+  for (let i = 1; i <= totalDuplas; i++) {
+    const nome = document.getElementById("nome"+i).value || "Dupla " + i;
+    const total = document.getElementById("total"+i).innerText;
+    texto += `${nome}: R$ ${total}\n`;
+  }
+  navigator.clipboard.writeText(texto);
+  alert("Resultados copiados!");
 }
 </script>
 
